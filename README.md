@@ -1,4 +1,4 @@
-### JS Podcast App — DJS05
+### JS Podcast App — DJS-PP
 
 ## Overview
 
