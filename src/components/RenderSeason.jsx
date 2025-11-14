@@ -1,3 +1,6 @@
+import { useState } from "react";
+import GlobalAudioPlayer from "./GlobalAudioPlayer";
+
 /**
  * RenderSeason component displays the details of a single season and its episodes.
  * It shows the season's image, title, number of episodes, and a placeholder for the release date.
@@ -17,6 +20,8 @@
  */
 export default function RenderSeason ({ season }) {
     // If we need this to persist on reload, set useParams
+    // Need a state for the audio player that sets its own object of values that control the audio player for persistance
+    const [episodeAudio, setAudio] = useState();
     return (
         <div className="flex flex-col gap-2.5 bg-white border-2 border-gray-400 p-4">
             <div className="flex flex-col sm:grid sm:grid-cols-[auto_1fr] gap-5">
@@ -39,14 +44,18 @@ export default function RenderSeason ({ season }) {
                         <div>Episode:{episode.episode} {episode.title}</div>
                         <div className="line-clamp-1">{episode.description}</div>                     
                         <button 
-                        className='px-4 py-2 bg-gray-400 text-white rounded transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg' 
-                        onClick={() => console.log(new Audio(episode.file).play())}>
+                        className='px-4 py-2 bg-gray-400 text-white rounded transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg'
+                        value={episode.file} 
+                        onClick={(event) => setAudio(event.target.value)}>
                             Click to play audio 
                         </button>
                     </div>
                 </div>
             </div>
             )}
+            {console.log(episodeAudio)}
+            < GlobalAudioPlayer podcastAudio={episodeAudio} />
         </div>
     );
 }
+
