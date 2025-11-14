@@ -23,6 +23,8 @@ export default function RenderDetailsPage () {// Maybe pass the template as a ch
     const [podcast, setPodcast] = useState({});
     const [selectedSeason, setSeason] = useState(1);
     //const [setPodcastSeasonsData, setPodcastSeasons] = useState([]);
+    // Audio state
+    //const [audio, setAudio] = useState({});
     // Use state for loading wiget, starts as true and is set to false when the promise is resolved (.finally)
     const [loading, setLoading] = useState(true);
     // Use state for api error handling within the component 
@@ -33,6 +35,8 @@ export default function RenderDetailsPage () {// Maybe pass the template as a ch
         fetchData(podcastId).then(data => {
             const podcastFromParams = data;
             setPodcast(podcastFromParams);
+            //const newAudio = new Audio(podcastFromParams.file);
+            //setAudio(newAudio);
         }).catch(errorMessage => setError(errorMessage.message)).finally(() => setLoading(false));
     },[podcastId]);
 

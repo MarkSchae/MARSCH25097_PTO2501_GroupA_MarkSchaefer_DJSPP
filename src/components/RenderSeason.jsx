@@ -37,7 +37,12 @@ export default function RenderSeason ({ season }) {
                     <img className="w-20 h-20 rounded-2xl bg-gray-300 border-2 border-gray-600" src={season.image} alt={episode.title} />
                     <div className="flex flex-col gap-5">
                         <div>Episode:{episode.episode} {episode.title}</div>
-                        <div className="line-clamp-1">{episode.description}</div>
+                        <div className="line-clamp-1">{episode.description}</div>                     
+                        <button 
+                        className='px-4 py-2 bg-gray-400 text-white rounded transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg' 
+                        onClick={() => console.log(new Audio(episode.file).play())}>
+                            Click to play audio 
+                        </button>
                     </div>
                 </div>
             </div>
