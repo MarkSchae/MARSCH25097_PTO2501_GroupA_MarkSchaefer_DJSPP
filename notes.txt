@@ -1,0 +1,49 @@
+Planning for dsj 05
+
+Challenge
+    Create a detailed page view for each podcast 
+    The page must be displayed when the user clicks on a podcast
+    The page for the detailed view must be displayed via routing
+    Users must be able to navigate different seasonal and genre data 
+    Data must be fetched from the provided API 
+
+Centralized state: 
+    Using React state or a state management library 
+        Not sure yet which I will be using 
+            For smaller projects prop drilling is fine 
+            I might want to experiment with a global state manager 
+            I want to start using un/subscribers even if not needed yet 
+
+
+Architecture choices:
+    Still deciding for the most part 
+        Readable state/main (global or drilling)
+        Keep the data/behaviour management inside the main App component/state 
+        Styling templates and variations in the passed children of components
+        Subscribers to listen for specific changes to certian elements or library state management (research needed)
+
+Tips:
+    Break down each challenge into smaller chunks/branches for experimentation and learning (solution finding)
+    Using vanilla test pages to understand why the framework was created and what the differences are 
+    Stick to the brief closely and complete the assignment/task(applies to company level too) as quickly
+        as possible then with any extra time create a branch optimizations version for a choice. 
+        Unless you are given free reign with regards to design/architecture.
+    Starting with a html tailwind page, exporting into a template inside a children tag in a component, might be a more natural workflow
+
+How I will start:
+    Create a new html file 
+    Create the styling and layout for the page view 
+    Create the logic for routing to this page without a reload onclick
+    Load the page passing data via params
+    Display all the relavent information for the clicked podcast page 
+    Create the appropriate navigation for the users 
+
+New workflow tips:
+    Start with what you want the browser to display and how (styling) 
+    Move to where the data/display elements will come from and pass/set the data 
+    Decide what behaviours are neccessary to act on the data at what level of DS 
+    Decide which DS are relavent, keep SRP and encapsulation in mind but try to keep behaviour seperate to styling 
+    Decide how the functions will pass and update data where needed 
+    Create the children components responsible for various renders of different types or just different views of the data 
+    Create the parent for the centralized store of the data and the methods that update the store as well as notify the other components of changes relavent to the data they need 
+    
