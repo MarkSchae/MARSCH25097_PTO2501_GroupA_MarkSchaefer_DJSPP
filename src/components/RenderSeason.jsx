@@ -21,7 +21,8 @@ import GlobalAudioPlayer from "./GlobalAudioPlayer";
 export default function RenderSeason ({ season }) {
     // If we need this to persist on reload, set useParams
     // Need a state for the audio player that sets its own object of values that control the audio player for persistance
-    const [episodeAudio, setAudio] = useState();
+    const [podcastAudio, setAudio] = useState();
+    const [episodeTitle, setEpisodeTitle] = useState();
     return (
         <div className="flex flex-col gap-2.5 bg-white border-2 border-gray-400 p-4">
             <div className="flex flex-col sm:grid sm:grid-cols-[auto_1fr] gap-5">
@@ -37,7 +38,7 @@ export default function RenderSeason ({ season }) {
                 </div>
             </div>
             {season.episodes.map(episode => 
-            <div className="flex flex-col gap-2.5 bg-white">
+            <div className="flex flex-col gap-2.5 bg-white" key={episode.title}>
                 <div className="flex flex-col p-2 border-2 border-gray-500 bg-gray-400 rounded-2xl sm:grid sm:grid-cols-[auto_1fr] gap-5">
                     <img className="w-20 h-20 rounded-2xl bg-gray-300 border-2 border-gray-600" src={season.image} alt={episode.title} />
                     <div className="flex flex-col gap-5">
@@ -46,15 +47,18 @@ export default function RenderSeason ({ season }) {
                         <button 
                         className='px-4 py-2 bg-gray-400 text-white rounded transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg'
                         value={episode.file} 
-                        onClick={(event) => setAudio(event.target.value)}>
+                        key={episode.title}
+                        onClick={(event) => {
+                            setAudio(event.target.value)
+                            setEpisodeTitle(episode.title)
+                            console.log(episode.episode)}}>
                             Click to play audio 
                         </button>
                     </div>
                 </div>
             </div>
             )}
-            {console.log(episodeAudio)}
-            < GlobalAudioPlayer podcastAudio={episodeAudio} />
+            < GlobalAudioPlayer podcastAudio={podcastAudio} episodeTitle={episodeTitle} />
         </div>
     );
 }
