@@ -28,8 +28,8 @@ export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn })
     const [podcastAudio, setAudio] = useState();
     //const [episodeTitle, setEpisodeTitle] = useState();
     // Now I need to get the useLocation and create a helper funciton to persist the search param in the url of any route if it exsists
-    function seSearchParamsUrl (episodeTitle) {
-        navigate(`?selected=${episodeTitle}`);
+    function seSearchParamsUrl (audioFile) {
+        navigate(`?selected=${audioFile}`);
     }
 
     return (
@@ -62,7 +62,7 @@ export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn })
                             //setEpisodeTitle(episode.title)
                             trackSetFn(episode.file)
                             episodeTitleSetFn(episode.title)
-                            seSearchParamsUrl(episode.title)
+                            seSearchParamsUrl(episode.file)
                             console.log(episode.episode)}}>
                             Click to play audio 
                         </button>

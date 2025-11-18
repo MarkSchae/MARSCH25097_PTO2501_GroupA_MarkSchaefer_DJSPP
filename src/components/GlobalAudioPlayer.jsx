@@ -26,7 +26,7 @@ export default function GlobalAudioPlayer ({ podcastAudio, episodeTitle }) {
             console.log(audio);
             console.log('Meta loaded');
             setLoading(false); 
-        })
+        }, { once:true })
         //audio.current = null;
         //currentTime.current = 0;
         
@@ -37,6 +37,7 @@ export default function GlobalAudioPlayer ({ podcastAudio, episodeTitle }) {
         //setPlayingAudio(podcastAudio); // Move this wont work because the src files are all the same
         //audio.current.play();
         console.log('running');
+        // Must remove the event listner
     }, [episodeTitle]);
 
     function updateProgressBar (currentTime) {

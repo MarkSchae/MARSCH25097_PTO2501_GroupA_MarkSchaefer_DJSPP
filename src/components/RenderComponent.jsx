@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import fetchData from '../api/fetch-data-api.jsx';
 import { apiDataMapping } from '../utils/helper.js';
 import { genres } from '../utils/genre-data.js';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import RenderDetailsPage from './PodcastDetailPage.jsx';
 import RenderSeason from './RenderSeason.jsx';
 import GlobalAudioPlayer from './GlobalAudioPlayer.jsx';
@@ -44,6 +44,18 @@ function App () { // First letter capital indicates React component
   const [episodeTitle, setEpisodeTitle] = useState(null);
   // Navigate to path state
   const navigateTo = useNavigate();
+  console.log(currentTrack);
+  // Get the title of the episode and the audio of the playing episode on reload from the search of location
+  const location = useLocation();
+  const audioQuery = new URLSearchParams(location.search);
+  console.log(audioQuery);
+  const audio = audioQuery.get('selected');
+  console.log(audio);
+  if(audio && currentTrack === null) {
+    setCurrentTrack(audio);
+    alert('Would you like the track to carry on playing?'); // Need a actual DOM manipulation button to be clicked for autoplay in the browser
+    console.log(currentTrack); // Add a continue button hidden to the div in the player and toggle the button vis on change of interaction variable, run the useeffect on change
+  }
   // Filter the podcasts data by title where the title.includes(userinput)
   // If a input exists inside userSearchInput return the filtered array, if ''(falsy) return the original array
   const filteredBySearch = userSearchInput
@@ -126,7 +138,12 @@ function App () { // First letter capital indicates React component
 
   // Function to navigate back to the home page, Keeps previous state (no trigger of re-render)
   function homePage () {
-    navigateTo('/');
+    if(audioQuery) {
+      navigateTo(`/?selected=${audio}`)
+    }
+    else {
+      navigateTo('/');
+    } 
   }
   // Also need to add logic to return to default search
   // Function to reset search parameters
@@ -227,7 +244,7 @@ function App () { // First letter capital indicates React component
         </div>
       </div>
       <Routes>
-        <Route path="/" element={<RenderData podcastData={podcastDataToRender} navigateFn={goToDetailedPodcastPage} />} />
+        <Route path='/' element={<RenderData podcastData={podcastDataToRender} navigateFn={goToDetailedPodcastPage} />} />
         <Route path="/podcast/:podcastId" element={<RenderDetailsPage trackSetFn={setCurrentTrack} episodeTitleSetFn={setEpisodeTitle} />} /> 
           {/** I think render the seasons logic as a nested route using outlet component */}
       </Routes>
