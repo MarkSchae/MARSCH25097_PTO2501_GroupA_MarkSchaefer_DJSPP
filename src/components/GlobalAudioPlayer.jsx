@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import { Outlet } from "react-router-dom";
 
 export default function GlobalAudioPlayer ({ podcastAudio, episodeTitle }) {
     // Run this in useEffect later so that the audio part does not need to re-render for state changes to the player
     const audio = useRef(null);
-    //const [podcastPlayingAudio, setPlayingAudio] = useState({});
+    console.log(podcastAudio);
+    console.log(episodeTitle);
+    //const [podcastPlayingAudio, setPlayingAudio] = useState({podcastAudio});
     //const [audioPlayer, setAudioPlayer] = useState({});
     //const [currentPlay, setCurrentPlay] = useState(0);
     const [playing, setPlay] = useState(true);
@@ -15,10 +18,11 @@ export default function GlobalAudioPlayer ({ podcastAudio, episodeTitle }) {
         console.log(audio);
         audio.current.currentTime = 0;
         audio.current.load();
-        audio.current.play();
+        //audio.current.play();
         audio.current.addEventListener('loadedmetadata', () => {
             console.log('meta Run');
             audio.current.play();
+            setPlay(true);
             console.log(audio);
             console.log('Meta loaded');
             setLoading(false); 

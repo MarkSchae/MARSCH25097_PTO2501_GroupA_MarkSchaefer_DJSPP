@@ -1,5 +1,6 @@
 import { useState } from "react";
 import GlobalAudioPlayer from "./GlobalAudioPlayer";
+import { useNavigate } from "react-router-dom";
 
 /**
  * RenderSeason component displays the details of a single season and its episodes.
@@ -18,11 +19,19 @@ import GlobalAudioPlayer from "./GlobalAudioPlayer";
  * @component
  * @returns {JSX.Element} A season card with its list of episodes.
  */
-export default function RenderSeason ({ season }) {
+export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn }) {
     // If we need this to persist on reload, set useParams
+    const navigate = useNavigate();
+
+    // Use useParams to set the audio src file for page reload persist
     // Need a state for the audio player that sets its own object of values that control the audio player for persistance
     const [podcastAudio, setAudio] = useState();
-    const [episodeTitle, setEpisodeTitle] = useState();
+    //const [episodeTitle, setEpisodeTitle] = useState();
+    // Now I need to get the useLocation and create a helper funciton to persist the search param in the url of any route if it exsists
+    function seSearchParamsUrl (episodeTitle) {
+        navigate(`?selected=${episodeTitle}`);
+    }
+
     return (
         <div className="flex flex-col gap-2.5 bg-white border-2 border-gray-400 p-4">
             <div className="flex flex-col sm:grid sm:grid-cols-[auto_1fr] gap-5">
@@ -50,7 +59,10 @@ export default function RenderSeason ({ season }) {
                         key={episode.title}
                         onClick={(event) => {
                             setAudio(event.target.value)
-                            setEpisodeTitle(episode.title)
+                            //setEpisodeTitle(episode.title)
+                            trackSetFn(episode.file)
+                            episodeTitleSetFn(episode.title)
+                            seSearchParamsUrl(episode.title)
                             console.log(episode.episode)}}>
                             Click to play audio 
                         </button>
@@ -58,7 +70,7 @@ export default function RenderSeason ({ season }) {
                 </div>
             </div>
             )}
-            < GlobalAudioPlayer podcastAudio={podcastAudio} episodeTitle={episodeTitle} />
+            
         </div>
     );
 }

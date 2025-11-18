@@ -17,7 +17,7 @@ import RenderSeason from "./RenderSeason";
  * @returns {JSX.Element} Podcast detail page with season and episode information.
  */
 
-export default function RenderDetailsPage () {// Maybe pass the template as a children object
+export default function RenderDetailsPage ({trackSetFn, episodeTitleSetFn}) {// Maybe pass the template as a children object
     const { state } = useLocation(); // Stores the current URL path as well as any objects sent via navigate (object)
     const { podcastId } = useParams(); // Returns the value in the URL @ path/:podcastId as an object
     const [podcast, setPodcast] = useState({});
@@ -92,7 +92,7 @@ export default function RenderDetailsPage () {// Maybe pass the template as a ch
                     {podcast.seasons.map(season => <option key={season.id} value={season.season}>Season:{season.season}</option>)}
                 </select>
             </div>
-            <RenderSeason season={podcast.seasons.find(season => season.season === selectedSeason)} />
+            <RenderSeason season={podcast.seasons.find(season => season.season === selectedSeason)} trackSetFn={trackSetFn} episodeTitleSetFn={episodeTitleSetFn} />
         </div>
     );
 }

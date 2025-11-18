@@ -5,6 +5,7 @@ import { genres } from '../utils/genre-data.js';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import RenderDetailsPage from './PodcastDetailPage.jsx';
 import RenderSeason from './RenderSeason.jsx';
+import GlobalAudioPlayer from './GlobalAudioPlayer.jsx';
 
 /**
  * Displays a grid populated by data fetched from an API
@@ -37,6 +38,10 @@ function App () { // First letter capital indicates React component
   const [loading, setLoading] = React.useState(true);
   // Use state for api error handling within the component 
   const [error, setError] = React.useState(null);
+  // State to persist and render the audio player
+  const [currentTrack, setCurrentTrack] = useState(null);
+  // Set the episode title for the useEffect
+  const [episodeTitle, setEpisodeTitle] = useState(null);
   // Navigate to path state
   const navigateTo = useNavigate();
   // Filter the podcasts data by title where the title.includes(userinput)
@@ -223,9 +228,10 @@ function App () { // First letter capital indicates React component
       </div>
       <Routes>
         <Route path="/" element={<RenderData podcastData={podcastDataToRender} navigateFn={goToDetailedPodcastPage} />} />
-        <Route path="/podcast/:podcastId" element={<RenderDetailsPage />} /> 
+        <Route path="/podcast/:podcastId" element={<RenderDetailsPage trackSetFn={setCurrentTrack} episodeTitleSetFn={setEpisodeTitle} />} /> 
           {/** I think render the seasons logic as a nested route using outlet component */}
       </Routes>
+      <GlobalAudioPlayer podcastAudio={currentTrack} episodeTitle={episodeTitle}/>
     </div>
   );
 }
