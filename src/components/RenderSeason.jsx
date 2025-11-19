@@ -21,16 +21,30 @@ import { useNavigate } from "react-router-dom";
  */
 export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn }) {
     // If we need this to persist on reload, set useParams
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
 
     // Use useParams to set the audio src file for page reload persist
     // Need a state for the audio player that sets its own object of values that control the audio player for persistance
     const [podcastAudio, setAudio] = useState();
+    // Favorites state
+    const [favorites, setFavorites] = useState(() => new Map()); // Lazy initialization of a map for the fav
+    function favorited (id) {
+        setFavorites(prevMap => {
+            const newMap = new Map(prevMap);
+            if(newMap.has(id)) {
+                newMap.delete(id);
+            } else {
+                newMap.set(id);
+            }
+            return newMap;
+        });
+    }
+    console.log(favorites);
     //const [episodeTitle, setEpisodeTitle] = useState();
     // Now I need to get the useLocation and create a helper funciton to persist the search param in the url of any route if it exsists
-    function seSearchParamsUrl (audioFile) {
+/*     function seSearchParamsUrl (audioFile) {
         navigate(`?selected=${audioFile}`);
-    }
+    } */
 
     return (
         <div className="flex flex-col gap-2.5 bg-white border-2 border-gray-400 p-4">
@@ -52,20 +66,32 @@ export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn })
                     <img className="w-20 h-20 rounded-2xl bg-gray-300 border-2 border-gray-600" src={season.image} alt={episode.title} />
                     <div className="flex flex-col gap-5">
                         <div>Episode:{episode.episode} {episode.title}</div>
-                        <div className="line-clamp-1">{episode.description}</div>                     
-                        <button 
-                        className='px-4 py-2 bg-gray-400 text-white rounded transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg'
-                        value={episode.file} 
-                        key={episode.title}
-                        onClick={(event) => {
-                            setAudio(event.target.value)
-                            //setEpisodeTitle(episode.title)
-                            trackSetFn(episode.file)
-                            episodeTitleSetFn(episode.title)
-                            seSearchParamsUrl(episode.file)
-                            console.log(episode.episode)}}>
-                            Click to play audio 
-                        </button>
+                        <div className="line-clamp-1">{episode.description}</div>  
+                        <div className="flex flex-row justify-between">
+                            <button 
+                            className='w-fit px-4 py-2 bg-gray-800 text-white rounded-2xl transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg'
+                            value={episode.file} 
+                            key={episode.title}
+                            onClick={(event) => {
+                                setAudio(event.target.value)
+                                //setEpisodeTitle(episode.title)
+                                trackSetFn(episode.file)
+                                episodeTitleSetFn(episode.title)
+                                //seSearchParamsUrl(episode.file)
+                                console.log(episode.episode)}}>
+                                Click to play audio 
+                            </button>
+                            <button
+                            className={`${favorites.has(`${episode.episode}`) ? 
+                                'self-center bg-amber-400 w-fit h-fit p-2 text-white rounded-full transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg border-2 border-red-950'
+                            : 'self-center bg-amber-50 w-fit h-fit p-2 text-white rounded-full transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg border-2 border-red-950'
+                            }
+                            `}
+                            onClick={(event) => favorited(event.target.value)}
+                            value={episode.episode}
+                            >
+                            </button>
+                        </div>                   
                     </div>
                 </div>
             </div>
