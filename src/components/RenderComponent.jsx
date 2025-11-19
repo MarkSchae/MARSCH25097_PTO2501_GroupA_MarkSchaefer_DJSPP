@@ -42,6 +42,8 @@ function App () { // First letter capital indicates React component
   const [currentTrack, setCurrentTrack] = useState(null);
   // Set the episode title for the useEffect
   const [episodeTitle, setEpisodeTitle] = useState(null);
+  // Check interaction for auto audio play
+  const [interacted, setInteracted] = useState(true);
   // Navigate to path state
   const navigateTo = useNavigate();
   console.log(currentTrack);
@@ -51,9 +53,13 @@ function App () { // First letter capital indicates React component
   console.log(audioQuery);
   const audio = audioQuery.get('selected');
   console.log(audio);
+  // To run on reload
   if(audio && currentTrack === null) {
     setCurrentTrack(audio);
-    alert('Would you like the track to carry on playing?'); // Need a actual DOM manipulation button to be clicked for autoplay in the browser
+    // Toggle vis of a interact button for continue playing/start over etc
+    // This should work once the interacted state changes onclick
+    setInteracted(false);
+    //alert('Would you like the track to carry on playing?'); // Need a actual DOM manipulation button to be clicked for autoplay in the browser
     console.log(currentTrack); // Add a continue button hidden to the div in the player and toggle the button vis on change of interaction variable, run the useeffect on change
   }
   // Filter the podcasts data by title where the title.includes(userinput)
@@ -248,7 +254,7 @@ function App () { // First letter capital indicates React component
         <Route path="/podcast/:podcastId" element={<RenderDetailsPage trackSetFn={setCurrentTrack} episodeTitleSetFn={setEpisodeTitle} />} /> 
           {/** I think render the seasons logic as a nested route using outlet component */}
       </Routes>
-      <GlobalAudioPlayer podcastAudio={currentTrack} episodeTitle={episodeTitle}/>
+      <GlobalAudioPlayer podcastAudio={currentTrack} episodeTitle={episodeTitle} interacted={interacted}/>
     </div>
   );
 }

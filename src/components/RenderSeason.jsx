@@ -70,7 +70,6 @@ export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn })
                 </div>
             </div>
             )}
-            
         </div>
     );
 }
