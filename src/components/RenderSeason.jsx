@@ -27,7 +27,20 @@ export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn })
     // Need a state for the audio player that sets its own object of values that control the audio player for persistance
     const [podcastAudio, setAudio] = useState();
     // Favorites state
-    const [favorites, setFavorites] = useState(() => new Map()); // Lazy initialization of a map for the fav
+    const [favorites, setFavorites] = useState(() => {
+        const storage = localStorage.getItem('localStorageFavorites');
+        if(storage) {
+            return new Map(JSON.parse(storage));
+        }
+        return new Map();
+    }); // Lazy initialization of a map for the fav - initialize with local storage
+    
+    // Function to save to local storage
+    function localStorageFavorites (map) {
+        const mapArr = Array.from(map.entries());
+        localStorage.setItem('localStorageFavorites', JSON.stringify(mapArr));
+    }
+    
     function favorited (id) {
         setFavorites(prevMap => {
             const newMap = new Map(prevMap);
@@ -35,7 +48,8 @@ export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn })
                 newMap.delete(id);
             } else {
                 newMap.set(id);
-            }
+            } // Save map to local storage
+            localStorageFavorites(newMap);
             return newMap;
         });
     }
