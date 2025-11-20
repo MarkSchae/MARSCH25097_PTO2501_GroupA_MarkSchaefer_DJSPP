@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
  * @component
  * @returns {JSX.Element} A season card with its list of episodes.
  */
-export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn }) {
+export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn, podcast }) {
     // If we need this to persist on reload, set useParams
     //const navigate = useNavigate();
 
@@ -40,14 +40,17 @@ export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn })
         const mapArr = Array.from(map.entries());
         localStorage.setItem('localStorageFavorites', JSON.stringify(mapArr));
     }
-    
-    function favorited (id) {
+    console.log(podcast.id);
+    console.log(season.season);
+    console.log(season);
+    function favorited (id, podcastId) {
+        console.log(podcastId);
         setFavorites(prevMap => {
             const newMap = new Map(prevMap);
             if(newMap.has(id)) {
                 newMap.delete(id);
             } else {
-                newMap.set(id);
+                newMap.set(id, podcastId);
             } // Save map to local storage
             localStorageFavorites(newMap);
             return newMap;
@@ -66,7 +69,7 @@ export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn })
                 <img className="w-20 rounded-2xl" src={season.image} alt={season.title} />
                 <div className="flex flex-col gap-1.5">
                     <h1 className="text-2xl">{season.title}</h1>
-                    <div>Description that i cant find</div>
+                    <div>Description that i cant find {season.season}</div>
                     <div className="flex flex-row gap-2">
                         <div>{season.episodes.length}</div>
                         <div className="text-[10px] flex items-center opacity-50">⚫</div>
@@ -96,13 +99,13 @@ export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn })
                                 Click to play audio 
                             </button>
                             <button
-                            className={`${favorites.has(`${episode.episode}`) ? 
+                            className={`${favorites.has(`${episode.title}`) ? 
                                 'self-center bg-amber-400 w-fit h-fit p-2 text-white rounded-full transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg border-2 border-red-950'
                             : 'self-center bg-amber-50 w-fit h-fit p-2 text-white rounded-full transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg border-2 border-red-950'
                             }
                             `}
-                            onClick={(event) => favorited(event.target.value)}
-                            value={episode.episode}
+                            onClick={(event) => favorited(event.target.value, podcast.id)}
+                            value={episode.title}
                             >
                             </button>
                         </div>                   
@@ -113,4 +116,12 @@ export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn })
         </div>
     );
 }
-
+/**
+ * Thinking
+ * Set the map in the main render component
+ * Pass the setter function down to render season
+ * Set the main hook to the local store map
+ * Function to filter podcasts by title, then navigate to favorites with filter
+ * I just dont want everything running again when favoriting
+ * Use the local storage duh
+ */

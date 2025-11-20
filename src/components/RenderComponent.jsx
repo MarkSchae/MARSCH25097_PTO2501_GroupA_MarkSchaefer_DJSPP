@@ -6,6 +6,7 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import RenderDetailsPage from './PodcastDetailPage.jsx';
 import RenderSeason from './RenderSeason.jsx';
 import GlobalAudioPlayer from './GlobalAudioPlayer.jsx';
+import RenderFavorites from './RenderFavorites.jsx';
 
 /**
  * Displays a grid populated by data fetched from an API
@@ -133,6 +134,21 @@ function App () { // First letter capital indicates React component
   if (loading) return  <div className="w-10 h-10 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin mx-auto my-4"></div>;
   if (error) return <div>Error: {error}</div>;
 
+  // Get local storage fav, filter podcasts for fav titles, navigate to fav page with filtered podcast
+  const savedFavorites = localStorage.getItem('localStorageFavorites');
+  const favorites = savedFavorites ? new Map(JSON.parse(savedFavorites)) : 'Nothing in Local Fav';
+  // Filter for the podcast objects in the favorites, had to check only if mapped item value matches pod.id (maybe strange way that i saved the map)
+  const filterFavorites = podcastArray.filter(podcast => Array.from(favorites.values()).includes(podcast.id));
+  // Need to re-render the main component when the local storage changes because this does not run again with reload
+  // Might have to also pass the filtered podcasts in to fav and compare the 2 arrays so the filter works in fav
+  console.log(filterFavorites);
+
+  // Navigate to the fav page with the filtered podcasts inside favorites
+  function goToFavPage () {
+    navigateTo('/favorites');
+  }
+ 
+
   // Navigate to detailed page onclick
   function goToDetailedPodcastPage (podcast) {
     navigateTo(`/podcast/${podcast.id}`, { state: podcast });
@@ -167,6 +183,11 @@ function App () { // First letter capital indicates React component
   return (
     <div className="p-4 flex flex-col gap-2.5 items-center">
       <div className='flex flex-col sm:flex-row gap-2.5'>
+        <button
+          className='px-4 py-2 bg-gray-400 text-white rounded transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg'
+          onClick={() => goToFavPage()}>
+          Favorites 
+        </button>
         <button
           className='px-4 py-2 bg-gray-400 text-white rounded transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg'
           onClick={() => homePage()}>
@@ -253,6 +274,11 @@ function App () { // First letter capital indicates React component
         <Route path='/' element={<RenderData podcastData={podcastDataToRender} navigateFn={goToDetailedPodcastPage} />} />
         <Route path="/podcast/:podcastId" element={<RenderDetailsPage trackSetFn={setCurrentTrack} episodeTitleSetFn={setEpisodeTitle} />} /> 
           {/** I think render the seasons logic as a nested route using outlet component */}
+          {/** Put the favorites page here, send the filtered podcase array with it, use renderdata as child or outlet */}
+        <Route path='/favorites' element={<RenderFavorites favorites={filterFavorites} favMap={favorites}>
+                                            <RenderData podcastData={filterFavorites} navigateFn={goToDetailedPodcastPage} />
+                                          </RenderFavorites >}
+          />
       </Routes>
       <GlobalAudioPlayer podcastAudio={currentTrack} episodeTitle={episodeTitle} interacted={interacted}/>
     </div>
@@ -263,7 +289,7 @@ export default App
 // Props passed in as a object argument here and deconstructed in the {} so as to use .map on the array
 // New component that reders the styling template using the props passed by the App parent component
 function RenderData ({ podcastData, navigateFn }) {
-  return (
+  return ( 
     <div className='flex flex-col gap-4 bg-gray-200 p-4'>
       <div className='flex flex-col gap-5 sm:grid sm:grid-cols-2 xl:grid-cols-4'>
       {podcastData.map(podcast => (

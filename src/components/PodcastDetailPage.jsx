@@ -92,7 +92,7 @@ export default function RenderDetailsPage ({trackSetFn, episodeTitleSetFn}) {// 
                     {podcast.seasons.map(season => <option key={season.id} value={season.season}>Season:{season.season}</option>)}
                 </select>
             </div>
-            <RenderSeason season={podcast.seasons.find(season => season.season === selectedSeason)} trackSetFn={trackSetFn} episodeTitleSetFn={episodeTitleSetFn} />
+            <RenderSeason season={podcast.seasons.find(season => season.season === selectedSeason)} trackSetFn={trackSetFn} episodeTitleSetFn={episodeTitleSetFn} podcast={podcast} />
         </div>
     );
 }
