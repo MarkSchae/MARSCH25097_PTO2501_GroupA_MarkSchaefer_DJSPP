@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 export default function GlobalAudioPlayer ({ podcastAudio, episodeTitle, interacted }) {
     // Run this in useEffect later so that the audio part does not need to re-render for state changes to the player
     const audio = useRef(null);
+    console.log(interacted);
     // For the interacted, I will probably have to create a state here to then hide the continue playing btn
     console.log(podcastAudio);
     console.log(episodeTitle);

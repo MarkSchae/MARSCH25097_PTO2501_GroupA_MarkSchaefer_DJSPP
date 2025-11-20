@@ -51,9 +51,9 @@ function App () { // First letter capital indicates React component
   // Get the title of the episode and the audio of the playing episode on reload from the search of location
   const location = useLocation();
   const audioQuery = new URLSearchParams(location.search);
-  console.log(audioQuery);
+  console.log(`RenderComponent:${audioQuery}`);
   const audio = audioQuery.get('selected');
-  console.log(audio);
+  console.log(`RenderComponent:${audio}`);
   // To run on reload
   if(audio && currentTrack === null) {
     setCurrentTrack(audio);
@@ -61,7 +61,7 @@ function App () { // First letter capital indicates React component
     // This should work once the interacted state changes onclick
     setInteracted(false);
     //alert('Would you like the track to carry on playing?'); // Need a actual DOM manipulation button to be clicked for autoplay in the browser
-    console.log(currentTrack); // Add a continue button hidden to the div in the player and toggle the button vis on change of interaction variable, run the useeffect on change
+    console.log(`RenderComponent:${currentTrack}`); // Add a continue button hidden to the div in the player and toggle the button vis on change of interaction variable, run the useeffect on change
   }
   // Filter the podcasts data by title where the title.includes(userinput)
   // If a input exists inside userSearchInput return the filtered array, if ''(falsy) return the original array
@@ -138,29 +138,39 @@ function App () { // First letter capital indicates React component
   const savedFavorites = localStorage.getItem('localStorageFavorites');
   const favorites = savedFavorites ? new Map(JSON.parse(savedFavorites)) : 'Nothing in Local Fav';
   // Filter for the podcast objects in the favorites, had to check only if mapped item value matches pod.id (maybe strange way that i saved the map)
-  const filterFavorites = podcastArray.filter(podcast => Array.from(favorites.values()).includes(podcast.id));
+  const filterFavorites = sortedPodcasts.filter(podcast => Array.from(favorites.values()).includes(podcast.id));
   // Need to re-render the main component when the local storage changes because this does not run again with reload
   // Might have to also pass the filtered podcasts in to fav and compare the 2 arrays so the filter works in fav
   console.log(filterFavorites);
 
   // Navigate to the fav page with the filtered podcasts inside favorites
   function goToFavPage () {
-    navigateTo('/favorites');
+    if(audio) {
+      navigateTo(`/favorites?selected=${audio}`)
+    } else {
+      navigateTo('/favorites');
+    }
   }
  
-
   // Navigate to detailed page onclick
   function goToDetailedPodcastPage (podcast) {
-    navigateTo(`/podcast/${podcast.id}`, { state: podcast });
+    if(audio) {
+      navigateTo(`/podcast/${podcast.id}?selected=${audio}`, { state: podcast })
+    } else {
+      navigateTo(`/podcast/${podcast.id}`, { state: podcast });
+    }
   }
 
 /*   function seasonsLoad (podcast, season) {
     navigateTo(`/podcast/${podcast.id}/season`, { state: season })
   } */
-
+  console.log(audioQuery);
+  console.log(audio);
   // Function to navigate back to the home page, Keeps previous state (no trigger of re-render)
   function homePage () {
-    if(audioQuery) {
+    console.log('homepage running');
+    if(audio !== null) {
+      console.log(`RenderComponent home function:${audio}`);
       navigateTo(`/?selected=${audio}`)
     }
     else {
