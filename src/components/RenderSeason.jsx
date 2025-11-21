@@ -40,31 +40,19 @@ export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn, p
         const mapArr = Array.from(map.entries()).map(([key, set]) => [key, Array.from(set)]); // Have to convert the map and the set into arrays for json
         localStorage.setItem('localStorageFavorites', JSON.stringify(mapArr));
     }
-    console.log(podcast.id);
-    console.log(season.season);
-    console.log(season);
     // Set the local storage to a map that contains a set of vars for fast lookup as well as access to values
-    function favorited (podcastId, episodeTitle, seasonNm) {
-        console.log(podcastId);
-        console.log(episodeTitle);
-        console.log(seasonNm);
+    function favorited (episodeFavTitle, podcastId, seasonNm) {
         setFavorites(prevMap => {
-            console.log('running?');
             const newMap = new Map(prevMap);
-            console.log('running?');
-            if(newMap.get(podcastId)?.has(episodeTitle)) {
-                console.log('running?');
-                newMap.delete(podcastId);
+            if(newMap.has(episodeFavTitle)) {
+                newMap.delete(episodeFavTitle);
             } else {
-                newMap.set(podcastId, new Set([episodeTitle, `Season: ${seasonNm}`]));
-                console.log(newMap);
+                newMap.set(episodeFavTitle, new Set([podcastId, seasonNm]));
             } // Save map to local storage
             localStorageFavorites(newMap);
-            console.log(newMap);
             return newMap;
         });
     }
-    console.log(favorites);
     //const [episodeTitle, setEpisodeTitle] = useState();
     // Now I need to get the useLocation and create a helper funciton to persist the search param in the url of any route if it exsists
     function setSearchParamsUrl (audioFile) {
@@ -107,12 +95,12 @@ export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn, p
                                 Click to play audio 
                             </button>
                             <button
-                            className={`${favorites.get(podcast.id)?.has(episode.title) ? 
+                            className={`${favorites.has(episode.title) ? 
                                 'self-center bg-amber-400 w-fit h-fit p-2 text-white rounded-full transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg border-2 border-red-950'
                             : 'self-center bg-amber-50 w-fit h-fit p-2 text-white rounded-full transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg border-2 border-red-950'
                             }
                             `}
-                            onClick={(event) => favorited(podcast.id, event.target.value, season.season)}
+                            onClick={(event) => favorited(event.target.value, podcast.id, season.season)}
                             value={episode.title}
                             >
                             </button>

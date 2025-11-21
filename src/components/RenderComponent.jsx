@@ -141,7 +141,14 @@ function App () { // First letter capital indicates React component
   console.log(savedFavorites);
   const favorites = savedFavorites ? new Map(savedFavorites.map(([key, setArr]) => [key, new Set(setArr)])) : new Map();
   // Filter for the podcast objects in the favorites, had to check only if mapped item value matches pod.id (maybe strange way that i saved the map)
-  const filterFavorites = sortedPodcasts.filter(podcast => favorites.has(podcast.id)); // Checking keys now not values
+  const filterFavorites = sortedPodcasts.filter(podcast => {
+  // Check all sets in the Map
+  for (const set of favorites.values()) {
+    if (set.has(podcast.id)) return true; // found a match
+  }
+  return false; // no match
+});
+ // Checking keys now not values
   // Need to re-render the main component when the local storage changes because this does not run again with reload
   // Might have to also pass the filtered podcasts in to fav and compare the 2 arrays so the filter works in fav
   console.log(filterFavorites);
@@ -284,14 +291,11 @@ function App () { // First letter capital indicates React component
         </div>
       </div>
       <Routes>
-        <Route path='/' element={<RenderData podcastData={podcastDataToRender} navigateFn={goToDetailedPodcastPage} />} />
+        <Route path='/' element={<RenderData podcastData={podcastDataToRender} navigateFn={goToDetailedPodcastPage} variantStyle={'default'} />} />
         <Route path="/podcast/:podcastId" element={<RenderDetailsPage trackSetFn={setCurrentTrack} episodeTitleSetFn={setEpisodeTitle} />} /> 
           {/** I think render the seasons logic as a nested route using outlet component */}
           {/** Put the favorites page here, send the filtered podcase array with it, use renderdata as child or outlet */}
-        <Route path='/favorites' element={<RenderFavorites favMap={favorites}>
-                                            <RenderData podcastData={filterFavorites} navigateFn={goToDetailedPodcastPage} />
-                                          </RenderFavorites >}
-          />
+        <Route path='/favorites' element={<RenderFavorites favMap={favorites} podcastData={filterFavorites} navigateFn={goToDetailedPodcastPage} episodeTitleSetFn={setEpisodeTitle} trackSetFn={setCurrentTrack} />} />
       </Routes>
       <GlobalAudioPlayer podcastAudio={currentTrack} episodeTitle={episodeTitle} interacted={interacted} setInteracted={setInteracted}/>
     </div>
@@ -302,6 +306,7 @@ export default App
 // Props passed in as a object argument here and deconstructed in the {} so as to use .map on the array
 // New component that reders the styling template using the props passed by the App parent component
 function RenderData ({ podcastData, navigateFn }) {
+
   return ( 
     <div className='flex flex-col gap-4 bg-gray-200 p-4'>
       <div className='flex flex-col gap-5 sm:grid sm:grid-cols-2 xl:grid-cols-4'>
