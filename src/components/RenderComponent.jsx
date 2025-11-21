@@ -7,6 +7,7 @@ import RenderDetailsPage from './PodcastDetailPage.jsx';
 import RenderSeason from './RenderSeason.jsx';
 import GlobalAudioPlayer from './GlobalAudioPlayer.jsx';
 import RenderFavorites from './RenderFavorites.jsx';
+import Carousel from './Carousel.jsx';
 
 /**
  * Displays a grid populated by data fetched from an API
@@ -113,6 +114,7 @@ function App () { // First letter capital indicates React component
   const startIndex = (currentPage - 1) * itemsPerPage;// Getting the starting and ending index for the slice
   const endIndex = startIndex + itemsPerPage;
   const paginatedPodcasts = sortedPodcasts.slice(startIndex, endIndex);// Returning a portion of the array using the index
+  const firstFivePodcasts = sortedPodcasts.slice(0, 5);
   // React use effect runs once for actions like fetching data from a api, then runs again as indicated(polling)
   /**
    * React effect hook that fetches and processes podcast data from an external API.
@@ -202,6 +204,9 @@ function App () { // First letter capital indicates React component
   // Some of the jsx html needs to be here so that the child component does not deal with any behaviour and data
   return (
     <div className="p-4 flex flex-col gap-2.5 items-center">
+    <div className='flex flex-row gap-5 overflow-x-scroll w-full overscroll-x-contain'>
+      <Carousel podcastData={podcastArray} navigateFn={goToDetailedPodcastPage} />
+    </div>
       <div className='flex flex-col sm:flex-row gap-2.5'>
         <button
           className='px-4 py-2 bg-gray-400 text-white rounded transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg'
