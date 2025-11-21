@@ -1,91 +1,85 @@
-### JS Podcast App — DJS-PP
+## Podcast App — DJS-PP
+Overview
 
-## Overview
+This is a dynamic podcast web application built with React and Tailwind CSS. It fetches live data from an external API and displays it in a responsive grid layout.
 
-This project is a dynamic podcast web application built with React and Tailwind CSS. It fetches live data from an external API and displays it in a responsive grid layout.
+The app demonstrates React component architecture, data management with hooks, and maintainable functional code. Functional programming principles are applied by separating data manipulation logic from rendering, improving clarity, scalability, and pure data practices.
 
-The app demonstrates React component architecture, data management with hooks, and maintainable functional code. It applies functional programming principles by separating data manipulating logic from data rendering, improving clarity, scalability, and pure data practices.
-
-## Technologies Used
+Technologies Used
 
 React (Vite / JSX) — Component-based UI with hooks for state and lifecycle management.
-
 Tailwind CSS — Utility-first styling framework for rapid, responsive design.
-
 JavaScript (ES6+) — Functional data mapping and transformation logic.
+External API — Fetches real-time podcast data (https://podcast-api.netlify.app/
+).
 
-External API — Fetches real-time podcast data (https://podcast-api.netlify.app/).
+Core Features
 
-## Core Features
-# Landing Page
+Landing Page
 
-- Displays all podcasts in a responsive grid.
+Displays all podcasts in a responsive grid.
 
-# Each podcast card includes:
+Each podcast card includes:
 
-- Cover image
+Cover image
 
-- Title
+Title
 
-- Number of seasons
+Number of seasons
 
-- Associated genre names
+Associated genre names
 
-- “Last updated” in a human-readable format
+“Last updated” in a human-readable format
 
-## Data Fetching & State Management
+Data Fetching & State Management
 
-- Fetches live data using an async API function (fetchData).
+Fetches live data using an async API function (fetchData).
 
-- Maps and merges genre data with podcast data via apiDataMapping.
+Maps and merges genre data with podcast data via apiDataMapping.
 
-- Implements loading and error states for user feedback.
+Implements loading and error states for user feedback.
 
-## Styling & Responsiveness
+Styling & Responsiveness
 
 Built with Tailwind CSS, ensuring:
 
-Clean, consistent typography and spacing.
+Clean, consistent typography and spacing
 
-Adaptive layouts across mobile, tablet, and desktop.
+Adaptive layouts across mobile, tablet, and desktop
 
-Utility classes for hover states, shadows, borders, and flex/grid layouts.
+Utility classes for hover states, shadows, borders, and flex/grid layouts
 
-## Code Architecture
+Code Architecture
 
-- RenderComponent.jsx — Parent component handles fetching, error/loading states, data mapping, and passes data as props.
+RenderComponent.jsx — Parent component handles fetching, error/loading states, data mapping, and passes data as props
 
-- RenderDetailedPage.jsx — Child component responsible displaying shows data.
+RenderDetailedPage.jsx — Child component responsible for displaying show data
 
-- RenderSeasons.jsx — Child component responsible displaying seasons data.
+RenderSeasons.jsx — Child component responsible for displaying seasons data
 
-- Helper Modules — Contain logic for date formatting, API mapping, and utility functions.
+Helper Modules — Contain logic for date formatting, API mapping, and utility functions
 
-## Design & Workflow
+Design & Workflow
 
-- React Hooks for Lifecycle Management (useState, useEffect)
+React Hooks for lifecycle management (useState, useEffect)
 
-- Functional Data Transformation separates logic from UI rendering
+Functional data transformation separates logic from UI rendering
 
-- Centralized Error & Loading Handling in the parent App component
+Centralized error and loading handling in the parent component
 
-- Reusable Component Design ensures each podcast card is dynamic and easily maintainable
+Reusable component design ensures each podcast card is dynamic and easily maintainable
 
-- Navigation & Routing uses react-router-dom with dynamic routes (/podcast/:podcastId)
+Navigation and routing use react-router-dom with dynamic routes (/podcast/:podcastId)
 
-- State Persistence through useState and navigate state object
+State persistence through useState and navigate state object
 
-## All non-UI logic (data formatting, genre lookups, timestamps) is handled in utility modules.
+All non-UI logic (data formatting, genre lookups, timestamps) is handled in utility modules.
 
-- Error & Loading Handling in Parent. Centralized in the parent App component to simplify control flow.
+Reusable Component Design
 
-- Ensures the child render component receives clean, ready-to-render data only.
+Each card uses props to render dynamic podcast data.
 
-## Reusable Component Design
-
-- Each card uses props to render dynamic podcast data.
-
-## How to Run the Project
+How to Run the Project
 
 Clone the repository
 
@@ -97,31 +91,31 @@ Install dependencies
 
 npm install
 
+
 Run the development server
 
 npm run dev
 
 
 Open in browser
-Visit the local development URL (usually http://localhost:5173).
+Visit the local development URL https://marsch-25097-pto-2501-group-a-mark.vercel.app/
 
-## Future Improvements
+Future Improvements
 
-- Add genre-based filtering and sorting.
+Add genre-based filtering and sorting
 
-- Implement detailed podcast modal view.
+Implement detailed podcast modal view
 
-- Improve accessibility (ARIA roles, keyboard navigation).
+Improve accessibility (ARIA roles, keyboard navigation)
 
-- Optimize large dataset handling.
+Optimize handling of large datasets
 
-- Add user preferences (theme toggle, sorting options).
+Add user preferences (theme toggle, sorting options)
 
-- Auto-refreshes (polling) every 2 minutes using setInterval within useEffect.
+Auto-refresh every 2 minutes using setInterval in useEffect
 
-- Make use of third party state management
+Integrate third-party state management
 
-- Lazy loading and mem caching to optimize searches and renders
+Lazy loading and memoization to optimize searches and renders
 
-- Optimize for the least amount of re-renders needed
-
+Reduce unnecessary re-renders for better performance
