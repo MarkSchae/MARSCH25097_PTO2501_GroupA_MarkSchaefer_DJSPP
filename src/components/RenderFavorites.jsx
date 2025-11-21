@@ -32,7 +32,7 @@ export default function RenderFavorites ({ podcastData, favMap, navigateFn, epis
         <div className='flex flex-col gap-4 bg-gray-200 p-4 w-full'>
             <div className='flex flex-col gap-5 sm:grid sm:grid-cols-2 xl:flex flex-col'>
             {podcastData.map(podcast => (
-                <div className='flex flex-col gap-4 p-3.5 bg-white rounded-2xl transition-transform duration-200 hover:-translate-y-1 hover:cursor-pointer hover:shadow-2xl shadow-gray-500'
+                <div className='custom-container flex flex-col gap-4 p-3.5 bg-white rounded-2xl transition-transform duration-200 hover:-translate-y-1 hover:cursor-pointer hover:shadow-2xl shadow-gray-500'
                 key={podcast.id}
                 /* onClick={() => navigateFn(podcast)} */>
                 <img className="w-20 h-20 rounded-2xl bg-gray-300 border-2 border-gray-600" src={podcast.image} alt={podcast.title} />

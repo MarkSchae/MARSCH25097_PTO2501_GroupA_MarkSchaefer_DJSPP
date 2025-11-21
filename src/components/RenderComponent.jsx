@@ -47,6 +47,13 @@ function App () { // First letter capital indicates React component
   // Check interaction for auto audio play
   const [interacted, setInteracted] = useState(true);
 
+  const [darkTheme, setDarkTheme] = useState(false);
+
+    React.useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') setDarkTheme(true);
+  }, []);
+
   // Get local storage fav, filter podcasts for fav titles, navigate to fav page with filtered podcast
   const savedFavorites = JSON.parse(localStorage.getItem('localStorageFavorites'));
   // Navigate to path state
@@ -139,7 +146,6 @@ function App () { // First letter capital indicates React component
   if (loading) return  <div className="w-10 h-10 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin mx-auto my-4"></div>;
   if (error) return <div>Error: {error}</div>;
 
-
   console.log(savedFavorites);
   const favorites = savedFavorites ? new Map(savedFavorites.map(([key, setArr]) => [key, new Set(setArr)])) : new Map();
   // Filter for the podcast objects in the favorites, had to check only if mapped item value matches pod.id (maybe strange way that i saved the map)
@@ -201,13 +207,31 @@ function App () { // First letter capital indicates React component
 
   // Pass the filtered array or the full array to the child render component
   const podcastDataToRender = paginatedPodcasts; // full array if search input is empty
+
+
+
+  // Toggle theme and save preference
+  const toggleTheme = () => {
+    setDarkTheme(prev => {
+      const newTheme = !prev;
+      localStorage.setItem('theme', newTheme ? 'dark' : 'light');
+      return newTheme;
+    });
+  };
+
   // Some of the jsx html needs to be here so that the child component does not deal with any behaviour and data
   return (
-    <div className="p-4 flex flex-col gap-2.5 items-center">
-    <div className='flex flex-row gap-5 overflow-x-scroll w-full overscroll-x-contain'>
+  <div className={darkTheme ? 'dark-theme' : ''}>
+  <div className="p-4 flex flex-col gap-2.5 items-center container">
+    <div className='flex flex-row gap-5 overflow-x-scroll w-full overscroll-x-contain container'>
       <Carousel podcastData={podcastArray} navigateFn={goToDetailedPodcastPage} />
     </div>
       <div className='flex flex-col sm:flex-row gap-2.5'>
+        <button
+          className='px-4 py-2 bg-gray-400 text-white rounded transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg'
+          onClick={toggleTheme}>
+            Switch to {darkTheme ? 'Light' : 'Dark'} Theme
+        </button>
         <button
           className='px-4 py-2 bg-gray-400 text-white rounded transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg'
           onClick={() => goToFavPage()}>
@@ -303,7 +327,8 @@ function App () { // First letter capital indicates React component
         <Route path='/favorites' element={<RenderFavorites favMap={favorites} podcastData={filterFavorites} navigateFn={goToDetailedPodcastPage} episodeTitleSetFn={setEpisodeTitle} trackSetFn={setCurrentTrack} />} />
       </Routes>
       <GlobalAudioPlayer podcastAudio={currentTrack} episodeTitle={episodeTitle} interacted={interacted} setInteracted={setInteracted}/>
-    </div>
+  </div>
+  </div>
   );
 }
 
@@ -313,17 +338,17 @@ export default App
 function RenderData ({ podcastData, navigateFn }) {
 
   return ( 
-    <div className='flex flex-col gap-4 bg-gray-200 p-4'>
+    <div className='flex flex-col gap-4 bg-gray-200 p-4 container'>
       <div className='flex flex-col gap-5 sm:grid sm:grid-cols-2 xl:grid-cols-4'>
       {podcastData.map(podcast => (
-        <div className='flex flex-col gap-4 p-3.5 bg-white rounded-2xl h-full transition-transform duration-200 hover:-translate-y-1 hover:cursor-pointer hover:shadow-2xl shadow-gray-500'
+        <div className='flex flex-col gap-4 p-3.5 bg-white rounded-2xl h-full transition-transform duration-200 hover:-translate-y-1 hover:cursor-pointer hover:shadow-2xl shadow-gray-500 container'
           key={podcast.id}
           onClick={() => navigateFn(podcast)}>
           <img src={podcast.image} alt={podcast.title} />
           <div className='flex-1'> {podcast.title} </div>
           <div> Seasons: {podcast.seasons} </div>
           <div className='flex flex-row justify-between'>
-            {podcast.genreNames.map(genreName => (<div key={genreName} className='bg-gray-300 rounded shadow shadow-black p-1'>{genreName}</div>))}
+            {podcast.genreNames.map(genreName => (<div key={genreName} className='bg-gray-300 rounded shadow shadow-black p-1 container'>{genreName}</div>))}
           </div>
           <div> {podcast.updatedReadable} </div>
         </div> 

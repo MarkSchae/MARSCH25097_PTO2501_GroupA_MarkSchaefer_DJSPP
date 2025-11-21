@@ -48,9 +48,9 @@ export default function RenderDetailsPage ({trackSetFn, episodeTitleSetFn}) {// 
     //const clickedPodcast = state || podcast; // Use the state object as the current clicked on podcast or fetch the podcast using params in the URL (persistant through page reload)
   
     return (
-        <div className='flex flex-col gap-4 bg-gray-200 p-4'>
+        <div className='flex flex-col gap-4 bg-gray-200 p-4 container'>
             <div className="flex flex-col gap-5 sm:grid sm:grid-cols-1 xl:grid-cols-[1fr_3fr] border-2 border-black shadow-2xl rounded-2xl">
-                <div className='flex flex-col gap-4 p-5 bg-white rounded-2xl h-full transition-transform duration-200 hover:-translate-y-1 hover:cursor-pointer hover:shadow-2xl shadow-gray-500'
+                <div className='container flex flex-col gap-4 p-5 bg-white rounded-2xl h-full transition-transform duration-200 hover:-translate-y-1 hover:cursor-pointer hover:shadow-2xl shadow-gray-500'
                     key={podcast.id}>
                     <img src={podcast.image} alt={podcast.title} />
                 </div> 

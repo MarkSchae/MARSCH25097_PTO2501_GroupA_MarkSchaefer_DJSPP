@@ -14,7 +14,7 @@ export default function Carousel({ podcastData, navigateFn }) {
   };
 
   return (
-    <div className="relative flex flex-col gap-4 bg-gray-200 p-4">
+    <div className="relative flex flex-col gap-4 bg-gray-200 p-4 container">
       {/* Scroll buttons */}
       <button
         className="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-600 text-white rounded-full p-2 z-10 hover:bg-gray-800"
@@ -37,7 +37,7 @@ export default function Carousel({ podcastData, navigateFn }) {
         {podcastData.map((podcast) => (
           <div
             
-            className='flex-shrink-0 w-16 flex flex-col gap-4 p-3.5 bg-white rounded-2xl h-full transition-transform duration-200 hover:-translate-y-1 hover:cursor-pointer hover:shadow-2xl shadow-gray-500'
+            className='flex-shrink-0 w-16 flex flex-col gap-4 p-3.5 bg-white rounded-2xl h-full transition-transform duration-200 hover:-translate-y-1 hover:cursor-pointer hover:shadow-2xl shadow-gray-500 container'
             key={podcast.id}
             onClick={() => navigateFn(podcast)}
             style={{ minWidth: "250px" }} 
@@ -49,7 +49,7 @@ export default function Carousel({ podcastData, navigateFn }) {
               {podcast.genreNames.map((genreName) => (
                 <div
                   key={genreName}
-                  className="bg-gray-300 rounded shadow shadow-black p-1 text-xs"
+                  className="bg-gray-300 rounded shadow shadow-black p-1 text-xs container"
                 >
                   {genreName}
                 </div>
