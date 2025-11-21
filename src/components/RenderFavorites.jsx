@@ -1,10 +1,11 @@
 import { map } from "lit/directives/map.js";
 import React, { useState, useEffect } from "react";
 import fetchData from "../api/fetch-data-api";
+import { useNavigate } from "react-router-dom";
 
 
 export default function RenderFavorites ({ podcastData, favMap, navigateFn, episodeTitleSetFn, trackSetFn }) {
-
+    const navigate = useNavigate();
     
     const [showId, setShowId] = useState();
     const [show, setShow] = useState({});
@@ -39,13 +40,19 @@ export default function RenderFavorites ({ podcastData, favMap, navigateFn, epis
                 return (
                     <div className="flex flex-row justify-between bg-amber-400 rounded-2xl p-2">
                         <button 
-                        onClick={() => {
-                            setShowId(podcast.id);
-                            episodeTitleSetFn(episodeTitle);
-                            trackSetFn(show.seasons.find(season => season.season === seasonNumber[0]).episodes.find(episode => episode.title === episodeTitle).file);
-                            setSeason(seasonNumber[0]);
-                            setCurrentEpisode(episodeTitle);
-                        }}
+                            onClick={async () => {
+                                const showData = await fetchData(podcast.id);
+                                setShow(showData);
+                                const episodeFile = showData.seasons
+                                    .find(s => s.season === seasonNumber[0])
+                                    .episodes.find(e => e.title === episodeTitle)?.file;
+
+                                episodeTitleSetFn(episodeTitle);
+                                trackSetFn(episodeFile);
+                                setSeason(seasonNumber[0]);
+                                setCurrentEpisode(episodeTitle);
+                                navigate(`?selected=${episodeFile}`);
+                            }}
                         className='w-fit px-4 py-2 bg-gray-800 text-white rounded-2xl transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg'
                         >
                             Play

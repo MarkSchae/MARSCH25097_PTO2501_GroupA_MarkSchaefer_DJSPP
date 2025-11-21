@@ -177,7 +177,6 @@ function App () { // First letter capital indicates React component
   function homePage () {
     console.log('homepage running');
     if(audio) {
-      console.log(`RenderComponent home function:${audio}`);
       navigateTo(`/?selected=${audio}`)
     }
     else {
