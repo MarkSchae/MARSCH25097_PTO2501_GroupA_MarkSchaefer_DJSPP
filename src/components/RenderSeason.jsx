@@ -20,11 +20,8 @@ import { useNavigate } from "react-router-dom";
  * @returns {JSX.Element} A season card with its list of episodes.
  */
 export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn, podcast }) {
-    // If we need this to persist on reload, set useParams
     const navigate = useNavigate();
 
-    // Use useParams to set the audio src file for page reload persist
-    // Need a state for the audio player that sets its own object of values that control the audio player for persistance
     const [podcastAudio, setAudio] = useState();
     // Favorites state
     const [favorites, setFavorites] = useState(() => {
@@ -53,7 +50,6 @@ export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn, p
             return newMap;
         });
     }
-    //const [episodeTitle, setEpisodeTitle] = useState();
     // Now I need to get the useLocation and create a helper funciton to persist the search param in the url of any route if it exsists
     function setSearchParamsUrl (audioFile) {
         navigate(`?selected=${audioFile}`);
@@ -87,7 +83,6 @@ export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn, p
                             key={episode.title}
                             onClick={(event) => {
                                 setAudio(event.target.value)
-                                //setEpisodeTitle(episode.title)
                                 trackSetFn(episode.file)
                                 episodeTitleSetFn(episode.title)
                                 setSearchParamsUrl(episode.file)

@@ -71,8 +71,6 @@ function App () { // First letter capital indicates React component
     // Toggle vis of a interact button for continue playing/start over etc
     // This should work once the interacted state changes onclick
     setInteracted(false);
-    //alert('Would you like the track to carry on playing?'); // Need a actual DOM manipulation button to be clicked for autoplay in the browser
-    console.log(`RenderComponent:${currentTrack}`); // Add a continue button hidden to the div in the player and toggle the button vis on change of interaction variable, run the useeffect on change
   }
   // Filter the podcasts data by title where the title.includes(userinput)
   // If a input exists inside userSearchInput return the filtered array, if ''(falsy) return the original array
@@ -148,7 +146,7 @@ function App () { // First letter capital indicates React component
 
   console.log(savedFavorites);
   const favorites = savedFavorites ? new Map(savedFavorites.map(([key, setArr]) => [key, new Set(setArr)])) : new Map();
-  // Filter for the podcast objects in the favorites, had to check only if mapped item value matches pod.id (maybe strange way that i saved the map)
+  
   const filterFavorites = sortedPodcasts.filter(podcast => {
   // Check all sets in the Map
   for (const set of favorites.values()) {
@@ -156,10 +154,6 @@ function App () { // First letter capital indicates React component
   }
   return false; // no match
 });
- // Checking keys now not values
-  // Need to re-render the main component when the local storage changes because this does not run again with reload
-  // Might have to also pass the filtered podcasts in to fav and compare the 2 arrays so the filter works in fav
-  console.log(filterFavorites);
 
   // Navigate to the fav page with the filtered podcasts inside favorites
   function goToFavPage () {
@@ -179,11 +173,6 @@ function App () { // First letter capital indicates React component
     }
   }
 
-/*   function seasonsLoad (podcast, season) {
-    navigateTo(`/podcast/${podcast.id}/season`, { state: season })
-  } */
-  console.log(audioQuery);
-  console.log(audio);
   // Function to navigate back to the home page, Keeps previous state (no trigger of re-render)
   function homePage () {
     console.log('homepage running');
@@ -227,10 +216,8 @@ function App () { // First letter capital indicates React component
       <Carousel podcastData={podcastArray} navigateFn={goToDetailedPodcastPage} />
     </div>
       <div className='flex flex-col sm:flex-row gap-2.5'>
-        <button
-          className='px-4 py-2 bg-gray-400 text-white rounded transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg'
-          onClick={toggleTheme}>
-            Switch to {darkTheme ? 'Light' : 'Dark'} Theme
+        <button onClick={toggleTheme} className="theme-btn">
+          {darkTheme ? "🌙" : "🌞"}
         </button>
         <button
           className='px-4 py-2 bg-gray-400 text-white rounded transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg'

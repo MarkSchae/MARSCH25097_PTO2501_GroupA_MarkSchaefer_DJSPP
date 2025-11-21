@@ -4,14 +4,7 @@ import { Outlet } from "react-router-dom";
 export default function GlobalAudioPlayer ({ podcastAudio, episodeTitle, interacted, setInteracted }) {
     // Run this in useEffect later so that the audio part does not need to re-render for state changes to the player
     const audio = useRef(null);
-    console.log(interacted);
-    
-    // For the interacted, I will probably have to create a state here to then hide the continue playing btn
-    console.log(podcastAudio);
-    console.log(episodeTitle);
-    //const [podcastPlayingAudio, setPlayingAudio] = useState({podcastAudio});
-    //const [audioPlayer, setAudioPlayer] = useState({});
-    //const [currentPlay, setCurrentPlay] = useState(0);
+
     const [playing, setPlay] = useState(true);
     const [loading, setLoading] = useState(true); 
     console.log(loading);
@@ -22,7 +15,6 @@ export default function GlobalAudioPlayer ({ podcastAudio, episodeTitle, interac
         console.log(audio);
         audio.current.currentTime = 0;
         audio.current.load();
-        //audio.current.play();
         audio.current.addEventListener('loadedmetadata', () => {
             console.log('meta Run');
             audio.current.play();
@@ -31,17 +23,6 @@ export default function GlobalAudioPlayer ({ podcastAudio, episodeTitle, interac
             console.log('Meta loaded');
             setLoading(false); 
         }, { once:true })
-        //audio.current = null;
-        //currentTime.current = 0;
-        
-        // Build the audio player object
-        //const audio = new Audio(podcastAudio);
-        //setAudioPlayer(audio);
-        //audio.play();
-        //setPlayingAudio(podcastAudio); // Move this wont work because the src files are all the same
-        //audio.current.play();
-        console.log('running');
-        // Must remove the event listner
     }, [episodeTitle]);
 
     function updateProgressBar (currentTime) {
@@ -55,7 +36,7 @@ export default function GlobalAudioPlayer ({ podcastAudio, episodeTitle, interac
     return (
         <div id="global-audio-player">
         <button
-          className={`${!interacted ? 'z-50 fixed top-0 left-0 px-4 py-2 bg-gray-400 text-white rounded transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg' : 'hidden'}`}
+          className={`${!interacted ? 'z-50 fixed inset-0 flex items-center justify-center px-4 py-2 bg-gray-400 text-white rounded transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg' : 'hidden'}`}
           onClick={() => {
             setInteracted(true);
             audio.current.play()}}>
@@ -71,7 +52,7 @@ export default function GlobalAudioPlayer ({ podcastAudio, episodeTitle, interac
             <div className="fixed bottom-0 left-0 w-full bg-gray-100 p-4 border-t border-gray-300 flex items-center justify-between z-50">
                 {/* Podcast Info */}
                 <div className="text-sm font-medium text-gray-700">
-                    Chill Track
+                    {episodeTitle}
                 </div>
                 {/* Progress bar */}
                 <div className="flex items-center space-x-2 w-1/2">

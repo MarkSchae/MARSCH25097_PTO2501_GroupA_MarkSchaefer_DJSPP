@@ -10,21 +10,11 @@ export default function RenderFavorites ({ podcastData, favMap, navigateFn, epis
     const [show, setShow] = useState({});
     const [season, setSeason] = useState(null);
     const [currentEpisode, setCurrentEpisode] = useState(null);
-
-
-
     useEffect(() => {
         console.log(showId)
         fetchData(`${showId}`).then(data => {
             const showData = data;
             setShow(showData);
-/*             const currentSeason = show.seasons?.find(s => s.season === season);
-            console.log(currentSeason);
-            const episode = season.episodes?.find(episode => episode.title === currentEpisode);
-            const e = currentSeason.episodes?.find(episode => episode.title === currentEpisode); 
-            console.log(episode); 
-            console.log(currentEpisode); 
-            console.log(e); */
         });
     },[showId]);
 
@@ -34,8 +24,10 @@ export default function RenderFavorites ({ podcastData, favMap, navigateFn, epis
             {podcastData.map(podcast => (
                 <div className='custom-container flex flex-col gap-4 p-3.5 bg-white rounded-2xl transition-transform duration-200 hover:-translate-y-1 hover:cursor-pointer hover:shadow-2xl shadow-gray-500'
                 key={podcast.id}
-                /* onClick={() => navigateFn(podcast)} */>
-                <img className="w-20 h-20 rounded-2xl bg-gray-300 border-2 border-gray-600" src={podcast.image} alt={podcast.title} />
+                >
+                <img 
+                onClick={() => navigateFn(podcast)}
+                className="w-20 h-20 rounded-2xl bg-gray-300 border-2 border-gray-600 transition-transform duration-200 hover:-translate-y-1 hover:cursor-pointer hover:shadow-2xl" src={podcast.image} alt={podcast.title} />
                 <div> {podcast.title} </div>
                 <div> Seasons: {podcast.seasons} </div>
                 <div className='flex flex-row justify-between'>
@@ -50,11 +42,7 @@ export default function RenderFavorites ({ podcastData, favMap, navigateFn, epis
                         onClick={() => {
                             setShowId(podcast.id);
                             episodeTitleSetFn(episodeTitle);
-                            console.log(show.title);
-                            console.log(show.seasons.find(season => season.season === seasonNumber[0]).episodes.find(episode => episode.title === episodeTitle).file);
-                            //console.log(episodeTitle);
                             trackSetFn(show.seasons.find(season => season.season === seasonNumber[0]).episodes.find(episode => episode.title === episodeTitle).file);
-                            //console.log(episode.file);
                             setSeason(seasonNumber[0]);
                             setCurrentEpisode(episodeTitle);
                         }}
