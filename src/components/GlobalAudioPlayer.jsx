@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Outlet } from "react-router-dom";
 
-export default function GlobalAudioPlayer ({ podcastAudio, episodeTitle, interacted }) {
+export default function GlobalAudioPlayer ({ podcastAudio, episodeTitle, interacted, setInteracted }) {
     // Run this in useEffect later so that the audio part does not need to re-render for state changes to the player
     const audio = useRef(null);
     console.log(interacted);
+    
     // For the interacted, I will probably have to create a state here to then hide the continue playing btn
     console.log(podcastAudio);
     console.log(episodeTitle);
@@ -13,6 +14,7 @@ export default function GlobalAudioPlayer ({ podcastAudio, episodeTitle, interac
     //const [currentPlay, setCurrentPlay] = useState(0);
     const [playing, setPlay] = useState(true);
     const [loading, setLoading] = useState(true); 
+    console.log(loading);
     // useRef is a way to manipulate DOM elements without React blocking it and without useRef causing a re-render
     // useRef is basically a way to use imperitive js updates inside React for frequent changes to very few or one dom element
     // Looking at adding a event listner to track times etc for the playing progress bar (because the bar is custom css)
@@ -54,7 +56,9 @@ export default function GlobalAudioPlayer ({ podcastAudio, episodeTitle, interac
         <div id="global-audio-player">
         <button
           className={`${!interacted ? 'z-50 fixed top-0 left-0 px-4 py-2 bg-gray-400 text-white rounded transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg' : 'hidden'}`}
-          onClick={() => audio.current.play()}>
+          onClick={() => {
+            setInteracted(true);
+            audio.current.play()}}>
           {`Continue playing?`} 
         </button>
             {/* Podcast player */}

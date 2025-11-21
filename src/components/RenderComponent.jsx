@@ -45,6 +45,9 @@ function App () { // First letter capital indicates React component
   const [episodeTitle, setEpisodeTitle] = useState(null);
   // Check interaction for auto audio play
   const [interacted, setInteracted] = useState(true);
+
+  // Get local storage fav, filter podcasts for fav titles, navigate to fav page with filtered podcast
+  const savedFavorites = JSON.parse(localStorage.getItem('localStorageFavorites'));
   // Navigate to path state
   const navigateTo = useNavigate();
   console.log(currentTrack);
@@ -134,11 +137,11 @@ function App () { // First letter capital indicates React component
   if (loading) return  <div className="w-10 h-10 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin mx-auto my-4"></div>;
   if (error) return <div>Error: {error}</div>;
 
-  // Get local storage fav, filter podcasts for fav titles, navigate to fav page with filtered podcast
-  const savedFavorites = localStorage.getItem('localStorageFavorites');
-  const favorites = savedFavorites ? new Map(JSON.parse(savedFavorites)) : 'Nothing in Local Fav';
+
+  console.log(savedFavorites);
+  const favorites = savedFavorites ? new Map(savedFavorites.map(([key, setArr]) => [key, new Set(setArr)])) : new Map();
   // Filter for the podcast objects in the favorites, had to check only if mapped item value matches pod.id (maybe strange way that i saved the map)
-  const filterFavorites = sortedPodcasts.filter(podcast => Array.from(favorites.values()).includes(podcast.id));
+  const filterFavorites = sortedPodcasts.filter(podcast => favorites.has(podcast.id)); // Checking keys now not values
   // Need to re-render the main component when the local storage changes because this does not run again with reload
   // Might have to also pass the filtered podcasts in to fav and compare the 2 arrays so the filter works in fav
   console.log(filterFavorites);
@@ -169,7 +172,7 @@ function App () { // First letter capital indicates React component
   // Function to navigate back to the home page, Keeps previous state (no trigger of re-render)
   function homePage () {
     console.log('homepage running');
-    if(audio !== null) {
+    if(audio) {
       console.log(`RenderComponent home function:${audio}`);
       navigateTo(`/?selected=${audio}`)
     }
@@ -285,12 +288,12 @@ function App () { // First letter capital indicates React component
         <Route path="/podcast/:podcastId" element={<RenderDetailsPage trackSetFn={setCurrentTrack} episodeTitleSetFn={setEpisodeTitle} />} /> 
           {/** I think render the seasons logic as a nested route using outlet component */}
           {/** Put the favorites page here, send the filtered podcase array with it, use renderdata as child or outlet */}
-        <Route path='/favorites' element={<RenderFavorites favorites={filterFavorites} favMap={favorites}>
+        <Route path='/favorites' element={<RenderFavorites favMap={favorites}>
                                             <RenderData podcastData={filterFavorites} navigateFn={goToDetailedPodcastPage} />
                                           </RenderFavorites >}
           />
       </Routes>
-      <GlobalAudioPlayer podcastAudio={currentTrack} episodeTitle={episodeTitle} interacted={interacted}/>
+      <GlobalAudioPlayer podcastAudio={currentTrack} episodeTitle={episodeTitle} interacted={interacted} setInteracted={setInteracted}/>
     </div>
   );
 }

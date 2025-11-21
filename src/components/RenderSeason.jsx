@@ -28,31 +28,39 @@ export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn, p
     const [podcastAudio, setAudio] = useState();
     // Favorites state
     const [favorites, setFavorites] = useState(() => {
-        const storage = localStorage.getItem('localStorageFavorites');
+        const storage = JSON.parse(localStorage.getItem('localStorageFavorites'));
         if(storage) {
-            return new Map(JSON.parse(storage));
+            return new Map(storage.map(([key, setArr]) => [key, new Set(setArr)])); // Reconstruct the map and set from the json array string
         }
         return new Map();
     }); // Lazy initialization of a map for the fav - initialize with local storage
     
     // Function to save to local storage
     function localStorageFavorites (map) {
-        const mapArr = Array.from(map.entries());
+        const mapArr = Array.from(map.entries()).map(([key, set]) => [key, Array.from(set)]); // Have to convert the map and the set into arrays for json
         localStorage.setItem('localStorageFavorites', JSON.stringify(mapArr));
     }
     console.log(podcast.id);
     console.log(season.season);
     console.log(season);
-    function favorited (id, podcastId) {
+    // Set the local storage to a map that contains a set of vars for fast lookup as well as access to values
+    function favorited (podcastId, episodeTitle, seasonNm) {
         console.log(podcastId);
+        console.log(episodeTitle);
+        console.log(seasonNm);
         setFavorites(prevMap => {
+            console.log('running?');
             const newMap = new Map(prevMap);
-            if(newMap.has(id)) {
-                newMap.delete(id);
+            console.log('running?');
+            if(newMap.get(podcastId)?.has(episodeTitle)) {
+                console.log('running?');
+                newMap.delete(podcastId);
             } else {
-                newMap.set(id, podcastId);
+                newMap.set(podcastId, new Set([episodeTitle, `Season: ${seasonNm}`]));
+                console.log(newMap);
             } // Save map to local storage
             localStorageFavorites(newMap);
+            console.log(newMap);
             return newMap;
         });
     }
@@ -99,12 +107,12 @@ export default function RenderSeason ({ season, trackSetFn, episodeTitleSetFn, p
                                 Click to play audio 
                             </button>
                             <button
-                            className={`${favorites.has(`${episode.title}`) ? 
+                            className={`${favorites.get(podcast.id)?.has(episode.title) ? 
                                 'self-center bg-amber-400 w-fit h-fit p-2 text-white rounded-full transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg border-2 border-red-950'
                             : 'self-center bg-amber-50 w-fit h-fit p-2 text-white rounded-full transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg border-2 border-red-950'
                             }
                             `}
-                            onClick={(event) => favorited(event.target.value, podcast.id)}
+                            onClick={(event) => favorited(podcast.id, event.target.value, season.season)}
                             value={episode.title}
                             >
                             </button>
